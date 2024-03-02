@@ -7,6 +7,7 @@ from game.board_handler import BoardHandler
 from game.bot_handler import BotHandler
 from game.logic.random import RandomLogic
 from game.logic.bestdiamond import BestDiamondLogic
+from game.logic.bestcluster import BestClusterLogic
 from game.logic.azul import Azul
 from game.logic.angiemerah import AngieMerah
 from game.logic.angiebiru import AngieBiru
@@ -19,6 +20,7 @@ DEFAULT_BOARD_ID = 1
 CONTROLLERS = {
     "Random": RandomLogic,
     "BestDiamond": BestDiamondLogic,
+    "BestCluster": BestClusterLogic,
     "Azul": Azul,
     "AngieMerah": AngieMerah,
     "AngieBiru":AngieBiru

@@ -1,5 +1,5 @@
 import random
-from typing import Optional
+from typing import Optional, List
 
 from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
@@ -30,40 +30,48 @@ def red_button(board_bot: GameObject, board: Board, close_tp: Position, far_tp: 
 
     return red_button if ((total_distance_normal <= total_distance_tp) or position_equals(board_bot.position, close_tp)) else close_tp 
 
-def best_diamond(board_bot: GameObject, board: Board, close_tp: Position, far_tp: Position):
+def within_cluster(p1: Position, p2: Position):
+    return (abs(p1.x - p2.x) < 3 and abs(p1.y - p2.y) < 3)
+
+def count_diamond_cluster(diamond: GameObject, diamonds: List[GameObject]):
+    sum = diamond.properties.points
+    for diamond2 in diamonds:
+        if (within_cluster(diamond.position, diamond2.position) and not(position_equals(diamond.position, diamond2.position))):
+            sum += diamond2.properties.points
+    return sum
+
+def best_cluster(board_bot: GameObject, board: Board, close_tp: Position, far_tp: Position):
     diamonds = board.diamonds
     props = board_bot.properties
 
-    best_diamond = diamonds[0]
+    best_cluster = diamonds[0]
     min_distance_points_ratio = 10000
     through_tp = False
+    chosen_distance = 100000
+    max_points = 0
 
     for diamond in diamonds:
         if (props.diamonds == 4 and diamond.properties.points == 2):
             continue
 
+        total_diamonds = count_diamond_cluster(diamond, diamonds)
+
         total_distance_normal = distance(board_bot.position, diamond.position)
         total_distance_tp = distance(board_bot.position, close_tp) + distance(far_tp, diamond.position)
         total_distance = min(total_distance_normal, total_distance_tp)
 
-        if ((total_distance / diamond.properties.points) < min_distance_points_ratio):
-            min_distance_points_ratio = (total_distance / diamond.properties.points)
-            best_diamond = diamond
+        if ((total_distance / min(total_diamonds, props.inventory_size - props.diamonds)) < min_distance_points_ratio):
+            min_distance_points_ratio = (total_distance / total_diamonds)
+            best_cluster = diamond
+            max_points = total_diamonds
+            chosen_distance = total_distance
             through_tp = True if (total_distance == total_distance_tp) else False
 
-    return close_tp if (through_tp and not(position_equals(board_bot.position, close_tp))) else best_diamond.position
-
-# def tackle_nearest_enemy(board_bot: GameObject, board: Board):
-#     enemies = [bot for bot in board.bots if bot.properties.name != board_bot.properties.name]
-
-#     nearest_enemy_distance = 10000000
-#     nearest_enemy = enemies[0]
-#     for enemy in enemies:
-#         if (distance(enemy.position, board_bot.position) < nearest_enemy_distance):
-#             nearest_enemy_distance = distance(enemy.position, board_bot.position)
-#             nearest_enemy = enemy
-    
-#     return nearest_enemy.position
+    print(f"Current position: {board_bot.position.x} {board_bot.position.y}")
+    print(f"Best cluster: {best_cluster.position.x} {best_cluster.position.y}")
+    print(f"Distance: {chosen_distance}")
+    print(f"Points: {max_points}")
+    return close_tp if (through_tp and not(position_equals(board_bot.position, close_tp))) else best_cluster.position
 
 def to_base(board_bot: GameObject, board: Board, close_tp: Position, far_tp: Position):
     base = board_bot.properties.base
@@ -73,7 +81,7 @@ def to_base(board_bot: GameObject, board: Board, close_tp: Position, far_tp: Pos
     
     return base if (return_distance_normal < return_distance_tp or position_equals(board_bot.position, close_tp)) else close_tp
 
-class BestDiamondLogic(BaseLogic):
+class BestClusterLogic(BaseLogic):
     def __init__(self):
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         self.goal_position: Optional[Position] = None
@@ -84,7 +92,6 @@ class BestDiamondLogic(BaseLogic):
         current_position = board_bot.position
         base = board_bot.properties.base
         print(props.milliseconds_left)
-        print(props.inventory_size)
         
         teleporters = teleporter_positions(board)
         close_tp = teleporters[0] if (distance(board_bot.position, teleporters[0]) < distance(board_bot.position, teleporters[1])) else teleporters[1]
@@ -94,16 +101,11 @@ class BestDiamondLogic(BaseLogic):
 
         if (props.diamonds == 5):
             self.goal_position = to_base(board_bot, board, close_tp, far_tp)
-        # elif (len(board.bots) == 2):
-        #     self.goal_position = tackle_nearest_enemy(board_bot, board)
         else:
             d_red_button = distance(red_button(board_bot, board, close_tp, far_tp), current_position)
-            d_best_diamond = distance(best_diamond(board_bot, board, close_tp, far_tp), current_position)
+            d_best_cluster = distance(best_cluster(board_bot, board, close_tp, far_tp), current_position)
 
-            if (d_red_button < d_best_diamond):
-                self.goal_position = red_button(board_bot, board, close_tp, far_tp)
-            else:
-                self.goal_position = best_diamond(board_bot, board, close_tp, far_tp)
+            self.goal_position = best_cluster(board_bot, board, close_tp, far_tp)
 
         if ((props.milliseconds_left / 1000) - 1 <= distance_to_base):
             self.goal_position = to_base(board_bot, board, close_tp, far_tp)

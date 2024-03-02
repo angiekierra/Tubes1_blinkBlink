@@ -3,6 +3,7 @@ from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
 from ..util import get_direction
 
+## Mentingin jarak 
 class TestBot(BaseLogic):
     def __init__(self):
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
@@ -55,7 +56,6 @@ class TestBot(BaseLogic):
                         self.goal_position = base
                     else:
                         self.goal_position = nearest_diamond
-                    self.goal_position = nearest_diamond
                 else :
                     nearest_diamond = self.find_nearest_diamond(board_bot,board)
                     self.goal_position = nearest_diamond

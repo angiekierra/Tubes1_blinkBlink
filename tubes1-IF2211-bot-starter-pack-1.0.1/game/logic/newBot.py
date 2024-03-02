@@ -3,12 +3,49 @@ from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
 from ..util import get_direction
 
+## Mentingin diamond merah
 class NewBot(BaseLogic):
     def __init__(self):
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         self.goal_position: Optional[Position] = None
         self.current_direction = 0
 
+    def best_diamond_ratio(self, board_bot: GameObject, board: Board):
+        best_diamond_position = None
+        max_ratio = float('-inf')
+
+        props = board_bot.properties
+
+        for diamond in board.diamonds:
+            points = diamond.properties.points
+            if (props.diamonds == 4 and points == 2):
+                continue
+            distance = (abs(board_bot.position.x - diamond.position.x)) + (abs(board_bot.position.y - diamond.position.y))
+            ratio = points/distance
+
+            if (ratio > max_ratio):
+                max_ratio = ratio
+                best_diamond_position = diamond.position
+        return best_diamond_position,max_ratio
+    
+    def get_teleporters(self,board:Board):
+        teleporter = []
+        for item in board.game_objects:
+            if item.type == "TeleportGameObject":
+                teleporter.append(item)
+        return teleporter
+    
+    def find_nearest_teleporter(self, board_bot: GameObject, teleporters):
+        nearest_teleporter = None
+        min_distance = float('inf')
+
+        for teleport in teleporters:
+            distance = (abs(board_bot.position.x - teleport.position.x)) + (abs(board_bot.position.y - teleport.position.y))
+            if (distance < min_distance):
+                min_distance = distance
+                nearest_teleporter = teleport
+        return nearest_teleporter
+    
     def get_nearest_diamond(self,board_bot: GameObject, board : Board) :
         nearest_diamond = None  
         min_distance = float('inf')
@@ -20,33 +57,8 @@ class NewBot(BaseLogic):
                 nearest_diamond = diamond
         return nearest_diamond
     
-    def get_nearest_diamond_blue (self, board_bot: GameObject, board: Board):
-        nearest_blue = None
-        min_distance = float('inf')
 
-        for diamond in board.diamonds:
-            if (diamond.properties.points == 1):
-                distance = (abs(board_bot.position.x - diamond.position.x)) + (abs(board_bot.position.y - diamond.position.y))
-                if distance < min_distance :
-                    min_distance = distance
-                    nearest_blue = diamond
-        return nearest_blue
-    
-    def get_second_nearest_red (self, board_bot: GameObject, nearest_diamond: GameObject, board: Board) -> Optional[GameObject]:
-        second_nearest = None
-        min_distance = float('inf')
-
-        for diamond in board.diamonds:
-            if (diamond != nearest_diamond):
-                distance = (abs(board_bot.position.x - diamond.position.x)) + (abs(board_bot.position.y - diamond.position.y))
-                if distance < min_distance :
-                    min_distance = distance
-                    second_nearest = diamond
-        if second_nearest.properties.points != 2:
-            second_nearest = None
-        return second_nearest
-        
-
+    # def teleport_ratio()
     def calculate_distance(self, point1: Position, point2: Position) -> Optional[int]:
         return abs(point1.x - point2.x) + abs(point1.y - point2.y)
     
@@ -55,6 +67,7 @@ class NewBot(BaseLogic):
         timeleft = board_bot.properties.milliseconds_left
         base = board_bot.properties.base
         distance_base = self.calculate_distance(board_bot.position,base)
+        
         if timeleft <= (distance_base*1000):
             # Move to base
             self.goal_position = base
@@ -62,24 +75,16 @@ class NewBot(BaseLogic):
             if props.diamonds == 5:
                 self.goal_position = base
             else:
-                if (props.diamonds == 4):
-                    # only look for blue diamonds
-                    nearest_diamond = self.get_nearest_diamond_blue(board_bot,board).position
-                    distance_diamond = self.calculate_distance(board_bot.position,nearest_diamond)
-                    if (distance_base < distance_diamond):
+                if(props.diamonds == 4):
+                    best_diamond = self.best_diamond_ratio(board_bot,board)
+                    distance_diamond = self.calculate_distance(board_bot.position,best_diamond)
+                    if (distance_base < distance_diamond[0]):
                         self.goal_position = base
                     else:
-                        self.goal_position = nearest_diamond
-                    self.goal_position = nearest_diamond
-                else :
-                    nearest_diamond = self.get_nearest_diamond(board_bot,board).position
-                    self.goal_position = nearest_diamond
-                    # nearest_red = self.get_second_nearest_red(board_bot,nearest_diamond,board).position
-
-                    # if nearest_red:
-                    #     self.goal_position = nearest_red
-                    # else:
-                    #     self.goal_position = nearest_diamond
+                        self.goal_position = best_diamond[0]
+                else:
+                    best_diamond = self.best_diamond_ratio(board_bot,board)
+                    self.goal_position = best_diamond[0]
 
 
 

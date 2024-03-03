@@ -31,7 +31,7 @@ class NewBot(BaseLogic):
 
     def best_diamond_ratio(self, board_bot: GameObject, board: Board, nearest_teleport : Position, next_teleport : Position):
         best_diamond_position = None
-        max_ratio = float('-inf')
+        min_ratio = float('inf')
         teleport = False
 
         props = board_bot.properties
@@ -46,10 +46,10 @@ class NewBot(BaseLogic):
             teleport = True if distance_with_teleport < distance_no_teleport else False
             real_distance = distance_with_teleport if teleport else distance_no_teleport
 
-            ratio = points/real_distance
+            ratio = real_distance/points
 
-            if (ratio > max_ratio):
-                max_ratio = ratio
+            if (ratio < min_ratio):
+                min_ratio = ratio
                 best_diamond_position = diamond.position
         return nearest_teleport if (teleport and not(position_equals(board_bot.position,nearest_teleport))) else best_diamond_position
 
@@ -66,7 +66,7 @@ class NewBot(BaseLogic):
         
 
         
-        if timeleft <= (distance_base*1000+2):
+        if timeleft < (distance_base*1000+1):
             # Move to base
             self.goal_position = self.base(board_bot,nearest_teleporter,next_teleporter)
         else:

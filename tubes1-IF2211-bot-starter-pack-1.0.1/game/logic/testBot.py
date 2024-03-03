@@ -64,7 +64,8 @@ class TestBot(BaseLogic):
         distance_no_teleport = self.calculate_distance(board_bot.position,base_position)
         distance_with_teleport = self.calculate_distance(board_bot.position,nearest_teleport) + self.calculate_distance(next_teleport,base_position)
 
-        return base_position if (distance_no_teleport <= distance_with_teleport) else nearest_teleport  
+        return base_position if (distance_no_teleport <= distance_with_teleport) else nearest_teleport
+    
     def next_move(self, board_bot: GameObject, board: Board):
         props = board_bot.properties
         timeleft = board_bot.properties.milliseconds_left

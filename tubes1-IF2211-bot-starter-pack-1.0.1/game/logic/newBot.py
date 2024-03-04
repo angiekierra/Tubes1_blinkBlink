@@ -67,12 +67,27 @@ class NewBot(BaseLogic):
         teleport = True if (distance_teleport < distance_no_teleport) else False
         return nearest_teleporter if (teleport and not(position_equals(board_bot.position,nearest_teleporter))) else red_button
 
-
+    def teleporter_obstacle(self,position: Position, board: Board):
+        teleporters = self.get_teleporter_position(board)
+        return (position_equals(teleporters[0], position) or position_equals(teleporters[1], position))
+    
+    def get_red_button_pos(self, board: Board):
+        red_button = None
+        for item in board.game_objects:
+            if item.type == "DiamondButtonGameObject":
+                red_button = item.position
+                break  
+        return red_button
+    
+    def red_button_obstacle(self,position : Position, board:Board):
+        red_button = self.get_red_button_pos(board)
+        return (position_equals(red_button, position))   
 
     def next_move(self, board_bot: GameObject, board: Board):
         props = board_bot.properties
-        timeleft = board_bot.properties.milliseconds_left
+        timeleft = props.milliseconds_left
         base = board_bot.properties.base
+        red_button = self.get_red_button_pos(board)
         distance_base = self.calculate_distance(board_bot.position,base)
         teleporters = self.get_teleporter_position(board)
 
@@ -81,7 +96,7 @@ class NewBot(BaseLogic):
         
 
         
-        if timeleft < (distance_base*1000+1):
+        if timeleft < (distance_base*1000+30):
             # Move to base
             self.goal_position = self.base(board_bot,nearest_teleporter,next_teleporter)
         else:
@@ -96,13 +111,13 @@ class NewBot(BaseLogic):
                     self.goal_position = base_pos if (distance_base < distance_diamond) else best_diamond
             
                 else:
-                    red_button = self.red_button(board_bot,board,nearest_teleporter,next_teleporter)
+                    to_red_button = self.red_button(board_bot,board,nearest_teleporter,next_teleporter)
                     best_diamond = self.best_diamond_ratio(board_bot,board,nearest_teleporter,next_teleporter)
 
-                    distance_red_button = self.calculate_distance(board_bot.position,red_button)
+                    distance_red_button = self.calculate_distance(board_bot.position,to_red_button)
                     distance_diamond = self.calculate_distance(board_bot.position,best_diamond)
 
-                    self.goal_position = red_button if (distance_red_button < distance_diamond) else best_diamond
+                    self.goal_position = to_red_button if (distance_red_button < distance_diamond) else best_diamond
 
 
         current_position = board_bot.position
@@ -114,5 +129,15 @@ class NewBot(BaseLogic):
                 self.goal_position.x,
                 self.goal_position.y,
             )
+
+            next_position = Position(x=(current_position.x + delta_x), y=(current_position.y + delta_y))
+            
+            # Dodge teleporter
+            if (self.teleporter_obstacle(next_position, board) and not(position_equals(self.goal_position, nearest_teleporter))):
+                delta_x, delta_y = self.dodge(board, delta_x, delta_y)
+
+            # Dodge red button
+            if (self.red_button_obstacle(next_position, board) and not(position_equals(self.goal_position, red_button))):
+                delta_x, delta_y = self.dodge(board, delta_x, delta_y)
 
         return delta_x, delta_y

@@ -10,14 +10,20 @@ from game.util import *
 from game.logic.base import BaseLogic
 from game.logic.testBot import TestBot
 from game.logic.newBot import NewBot
+from game.logic.azul import myBot
+from game.logic.neo1 import BestDiamondLogic
+from game.logic.neo2 import BestClusterLogic
 
 init()
 BASE_URL = "http://localhost:3000/api"
 DEFAULT_BOARD_ID = 1
 CONTROLLERS = {
     "Random": RandomLogic,
-    "TestBot" : TestBot,
-    "NewBot" : NewBot
+    "Angie1" : TestBot,
+    "Angie2" : NewBot,
+    "Azul" : myBot,
+    "Neo1" : BestDiamondLogic,
+    "Neo2" : BestClusterLogic
 }
 
 ###############################################################################

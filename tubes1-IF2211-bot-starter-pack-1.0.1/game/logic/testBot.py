@@ -130,7 +130,6 @@ class TestBot(BaseLogic):
         distance_base = self.calculate_distance(board_bot.position,base)
         red_button = self.get_red_button_pos(board)
         teleporters = self.get_teleporter_position(board)
-        nearest_bot = self.nearest_bot(board_bot,board)
         nearest_teleporter = teleporters[0] if (self.calculate_distance(board_bot.position,teleporters[0]) < self.calculate_distance(board_bot.position,teleporters[1])) else teleporters[1]
         next_teleporter = teleporters[0] if (self.calculate_distance(board_bot.position,teleporters[0]) >= self.calculate_distance(board_bot.position,teleporters[1])) else teleporters[1]
 
@@ -181,8 +180,7 @@ class TestBot(BaseLogic):
             if (self.red_button_obstacle(next_position, board) and not(position_equals(self.goal_position, red_button))):
                 delta_x, delta_y = self.dodge(board, delta_x, delta_y)
 
-            # if (self.bot_obstacle(next_position,nearest_bot)) and not (position_equals(self.goal_position,nearest_bot)):
-            #     delta_x, delta_y = self.dodge(board, delta_x, delta_y)
+            
 
 
         return delta_x, delta_y

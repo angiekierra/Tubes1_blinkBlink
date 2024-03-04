@@ -9,8 +9,8 @@ from game.logic.random import RandomLogic
 from game.logic.bestdiamond import BestDiamondLogic
 from game.logic.bestcluster import BestClusterLogic
 from game.logic.azul import Azul
-from game.logic.angiemerah import AngieMerah
-from game.logic.angiebiru import AngieBiru
+from game.logic.testbot import TestBot
+from game.logic.newbot import NewBot
 from game.util import *
 from game.logic.base import BaseLogic
 
@@ -22,8 +22,8 @@ CONTROLLERS = {
     "BestDiamond": BestDiamondLogic,
     "BestCluster": BestClusterLogic,
     "Azul": Azul,
-    "AngieMerah": AngieMerah,
-    "AngieBiru":AngieBiru
+    "AngieTest": TestBot,
+    "AngieNew": NewBot
 }
 
 ###############################################################################
@@ -208,12 +208,12 @@ while True:
     # Get new state
     board_bot = board.get_bot(bot)
     if not board_bot:
-        # Managed to get game over after move
+        # Managed to get game over afte2r move
         break
 
     # Don't spam the board more than it allows!
     # sleep(move_delay * time_factor)
-    sleep(1)
+    sleep(0.25)
 
 
 ###############################################################################

@@ -3,10 +3,27 @@ from typing import Optional, List
 
 from game.logic.base import BaseLogic
 from game.models import GameObject, Board, Position
-from ..util import get_direction, position_equals
+from ..util import clamp, position_equals
+
+def get_direction(current_x, current_y, dest_x, dest_y, h_priority):
+    delta_x = clamp(dest_x - current_x, -1, 1)
+    delta_y = clamp(dest_y - current_y, -1, 1)
+    if h_priority:
+        if delta_x != 0:
+            delta_y = 0
+    else:
+        if delta_y != 0:
+            delta_x = 0
+    return (delta_x, delta_y)
 
 def distance(p1: Position, p2: Position):
     return abs(p1.x - p2.x) + abs(p1.y - p2.y)
+
+def distance_tp(src: Position, dest: Position, close_tp: Position, far_tp: Position):
+    return distance(src, close_tp) + distance(far_tp, dest)
+
+def min_distance(src: Position, dest: Position, close_tp: Position, far_tp: Position):
+    return min(distance(src, dest), distance_tp(src, dest, close_tp, far_tp))
 
 def teleporter_positions(board: Board):
     teleporters = []
@@ -84,6 +101,7 @@ def to_base(board_bot: GameObject, board: Board, close_tp: Position, far_tp: Pos
 class BestClusterLogic(BaseLogic):
     def __init__(self):
         self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        self.h_priority = True
         self.goal_position: Optional[Position] = None
         self.current_direction = 0
 
@@ -91,45 +109,58 @@ class BestClusterLogic(BaseLogic):
         props = board_bot.properties
         current_position = board_bot.position
         base = board_bot.properties.base
+
         print(props.milliseconds_left)
         
         teleporters = teleporter_positions(board)
         close_tp = teleporters[0] if (distance(board_bot.position, teleporters[0]) < distance(board_bot.position, teleporters[1])) else teleporters[1]
         far_tp = teleporters[1] if (position_equals(close_tp, teleporters[0])) else teleporters[0]
 
-        distance_to_base = distance(current_position, base)
+        distance_to_base = min(distance(current_position, base), distance_tp(current_position, base, close_tp, far_tp))
 
         if (props.diamonds == 5):
             self.goal_position = to_base(board_bot, board, close_tp, far_tp)
+            print(f"To base chosen (full)")
         else:
             d_red_button = distance(red_button(board_bot, board, close_tp, far_tp), current_position)
             d_best_cluster = distance(best_cluster(board_bot, board, close_tp, far_tp), current_position)
 
-            self.goal_position = best_cluster(board_bot, board, close_tp, far_tp)
+            if (d_red_button < d_best_cluster and not(position_equals(red_button(board_bot, board, close_tp, far_tp), close_tp))):
+                self.goal_position = red_button(board_bot, board, close_tp, far_tp)
+                print(f"Red button chosen")
+            else:
+                self.goal_position = best_cluster(board_bot, board, close_tp, far_tp)
+                print(f"Best cluster chosen")
 
         if ((props.milliseconds_left / 1000) - 1 <= distance_to_base):
             self.goal_position = to_base(board_bot, board, close_tp, far_tp)
+            print(f"To base chosen (time)")
 
         if self.goal_position:
+            print(f"Goal position {self.goal_position.x} {self.goal_position.y}")
             # We are aiming for a specific position, calculate delta
             delta_x, delta_y = get_direction(
                 current_position.x,
                 current_position.y,
                 self.goal_position.x,
                 self.goal_position.y,
+                self.h_priority
             )
             
             new_position = Position(x=(current_position.x + delta_x), y=(current_position.y + delta_y))
             # check if destination isnt a teleporter, but blocked by a teleporter
             if (blocked_by_teleporter(new_position, board) and not(position_equals(self.goal_position, close_tp))):
+                print(f"Blocked by teleporter")
                 if (delta_x != 0): # if initially going vertically, move horizontally
                     delta_x = 0
+                    self.h_priority = True
                     if (board.is_valid_move(current_position, delta_x, 1)): 
                         delta_y = 1
                     else:
                         delta_y = -1 # go down if cant go up (at the top of the board)
                 else:
                     delta_y = 0
+                    self.h_priority = False
                     if (board.is_valid_move(current_position, 1, delta_y)):
                         delta_x = 1
                     else:

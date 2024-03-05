@@ -18,11 +18,11 @@ class myBot(BaseLogic):
         distance_to_base = abs(current_position.x - props.base.x) + abs(current_position.y - props.base.y)
 
         # Jika sedang membawa diamond dan waktu hampir habis, dan jarak ke base lebih besar dari jarak maksimum yang dapat ditempuh dalam sisa waktu
-        if props.diamonds > 0 and props.milliseconds_left <= 17000 and distance_to_base >= props.milliseconds_left/1000:
+        if props.diamonds > 0 and distance_to_base/(props.milliseconds_left/1000) >= 1:
             # Bot pergi ke base untuk mengamankan diamondnya
             self.goal_position = props.base
 
-        if props.diamonds == 4:     # Jika jumlah diamond di inventory sudah mencapai 4
+        if props.diamonds == 4 or props.diamonds == 3:     # Jika jumlah diamond di inventory sudah mencapai 3/4
             closest_low_value_diamond = self.find_closest_low_value_diamond(current_position, board.diamonds)
             if closest_low_value_diamond:
                 # Hitung jarak ke diamond bernilai 1

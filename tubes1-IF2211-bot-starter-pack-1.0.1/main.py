@@ -23,7 +23,7 @@ CONTROLLERS = {
     "BestCluster": BestClusterLogic,
     "Azul": Azul,
     "AngieTest": TestBot,
-    "AngieNew": NewBot
+    "AngieNew": NewBot,
 }
 
 ###############################################################################
@@ -213,7 +213,7 @@ while True:
 
     # Don't spam the board more than it allows!
     # sleep(move_delay * time_factor)
-    sleep(0.25)
+    sleep(1)
 
 
 ###############################################################################

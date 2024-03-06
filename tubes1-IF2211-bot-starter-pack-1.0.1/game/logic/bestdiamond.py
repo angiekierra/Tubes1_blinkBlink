@@ -129,7 +129,7 @@ class BestDiamondLogic(BaseLogic):
                 self.goal_position = best_diamond(board_bot, board, close_tp, far_tp)
                 print(f"Best diamond chosen")
 
-        if ((props.milliseconds_left / 1000) - 1 <= distance_to_base):
+        if ((props.milliseconds_left / 1000) - 1.5 <= distance_to_base):
             self.goal_position = to_base(board_bot, board, close_tp, far_tp)
             print(f"To base chosen (time)")
 

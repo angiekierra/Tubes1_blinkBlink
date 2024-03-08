@@ -60,7 +60,8 @@ class myBot(BaseLogic):
                         if diamond.properties.points > max_points:
                             max_points = diamond.properties.points
                             best_diamond = diamond
-                if best_diamond.properties.points == 2:
+                distance_to_best_diamond = abs(current_position.x - best_diamond.position.x - 1) + abs(current_position.y - best_diamond.position.y)
+                if best_diamond.properties.points == 2 and distance_to_best_diamond <= 7:
                     self.goal_position = best_diamond.position
                 else:
                     # Cari diamond dengan jarak terdeket

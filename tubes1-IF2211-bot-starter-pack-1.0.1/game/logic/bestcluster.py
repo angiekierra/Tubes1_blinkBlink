@@ -184,7 +184,7 @@ class BestClusterLogic(BaseLogic):
             new_position = Position(x=(current_position.x + delta_x), y=(current_position.y + delta_y))
             # Check if destination isnt a teleporter, but blocked by a teleporter
             if (blocked_by_teleporter(new_position, board) and not(position_equals(self.goal_position, close_tp))):
-                if (delta_x != 0): # If initially going vertically, move horizontally
+                if (delta_x != 0): # If initially going horizontally, move vertically
                     delta_x = 0
                     self.h_priority = True
                     if (board.is_valid_move(current_position, delta_x, 1)): 

@@ -96,8 +96,6 @@ def best_cluster_base(board_bot: GameObject, board: Board, close_tp: Position, f
     best_cluster = diamonds[0]
     min_distance_points_ratio = 10000
     through_tp = False
-    chosen_distance = 100000
-    max_points = 0
 
     for diamond in diamonds:
         if (props.diamonds == 4 and diamond.properties.points == 2):
@@ -112,14 +110,8 @@ def best_cluster_base(board_bot: GameObject, board: Board, close_tp: Position, f
         if ((total_distance / min(total_diamonds, props.inventory_size - props.diamonds)) < min_distance_points_ratio):
             min_distance_points_ratio = (total_distance / min(total_diamonds, props.inventory_size - props.diamonds))
             best_cluster = diamond
-            max_points = min(total_diamonds, props.inventory_size - props.diamonds)
-            chosen_distance = total_distance
             through_tp = True if (d_current_diamond == distance_tp(board_bot.position, diamond.position, close_tp, far_tp)) else False
 
-    print(f"Current position: {board_bot.position.x} {board_bot.position.y}")
-    print(f"Best cluster (returning): {best_cluster.position.x} {best_cluster.position.y}")
-    print(f"Distance: {chosen_distance}")
-    print(f"Points: {max_points}")
     return close_tp if (through_tp and not(position_equals(board_bot.position, close_tp))) else best_cluster.position
 
 # Direct the bot to base
@@ -192,7 +184,6 @@ class BestClusterLogic(BaseLogic):
             new_position = Position(x=(current_position.x + delta_x), y=(current_position.y + delta_y))
             # Check if destination isnt a teleporter, but blocked by a teleporter
             if (blocked_by_teleporter(new_position, board) and not(position_equals(self.goal_position, close_tp))):
-                print(f"Blocked by teleporter")
                 if (delta_x != 0): # If initially going vertically, move horizontally
                     delta_x = 0
                     self.h_priority = True

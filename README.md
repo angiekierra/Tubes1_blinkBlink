@@ -4,13 +4,7 @@
 This repository contains code for a starter bot for game. The bot is made for Algorithm Strategies task.
 
 ## Authors
-| Nama                             | NIM      |
-| ------------------------------- | -------- |
-| Angelica Kiera Ninta Gurning     | 13522048 |
-| Marzuli Suhada M                 | 13522070 |
-| Muhammad Neo Cicero Koda         | 13522110 |
-
-<table style="width:100%; background-color:#3498db; color:#ffffff;">
+<table style="width:100%; background-color:#87CEFA; color:#F0F8FF;">
   <tr>
     <th>Nama</th>
     <th>NIM</th>
@@ -39,9 +33,12 @@ The bot is coded with Python programming language and relies on Greedy Algorithm
 
 ## Program Requirements
 
-- [Node.js] (https://nodejs.org/en) 
-- [Docker desktop] (https://www.docker.com/products/docker-desktop/) 
-- Yarn (npm install --global yarn)
+- [Node.js](https://nodejs.org/en) 
+- [Docker desktop](https://www.docker.com/products/docker-desktop/) 
+- Yarn 
+    ```bash
+    npm install --global yarn
+    ```
 - Python
 
 ## How to build

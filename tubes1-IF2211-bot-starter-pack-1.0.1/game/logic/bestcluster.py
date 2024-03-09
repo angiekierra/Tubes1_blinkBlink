@@ -168,7 +168,7 @@ class BestClusterLogic(BaseLogic):
             else:
                 self.goal_position = best_cluster(board_bot, board, close_tp, far_tp)
 
-        if ((props.milliseconds_left / 1000) - 1.5 <= distance_to_base): # Return to base in time
+        if ((props.milliseconds_left / 1000) - 2 <= distance_to_base): # Return to base in time
             self.goal_position = to_base(board_bot, board, close_tp, far_tp)
 
         if self.goal_position:

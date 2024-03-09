@@ -8,6 +8,7 @@ from game.bot_handler import BotHandler
 from game.logic.random import RandomLogic
 from game.logic.bestdiamond import BestDiamondLogic
 from game.logic.bestcluster import BestClusterLogic
+from game.logic.bclustertest import BestClusterTestLogic
 from game.logic.azul import Azul
 from game.logic.testbot import TestBot
 from game.logic.newbot import NewBot
@@ -21,6 +22,7 @@ CONTROLLERS = {
     "Random": RandomLogic,
     "BestDiamond": BestDiamondLogic,
     "BestCluster": BestClusterLogic,
+    "BestClusterTest": BestClusterTestLogic,
     "Azul": Azul,
     "AngieTest": TestBot,
     "AngieNew": NewBot,

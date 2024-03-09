@@ -1,9 +1,12 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<div align="center">
 
 # Tubes1_blinkBlink 💎
 This repository contains code for a starter bot for game. The bot is made for Algorithm Strategies task.
 
 ## Authors
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 <table style="width:100%; background-color:#87CEFA; color:#F0F8FF;">
   <tr>
     <th>Nama</th>
@@ -22,6 +25,8 @@ This repository contains code for a starter bot for game. The bot is made for Al
     <td>13522110</td>
   </tr>
 </table>
+
+</div>
 
 ## General Information
 

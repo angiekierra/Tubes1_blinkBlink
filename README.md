@@ -1,10 +1,9 @@
 <div align="center">
 
-# Tugas Besar 1 IF2211 Strategi Algoritma <br/> Semester II tahun 2023/2024 <br/> Pemanfaatan Algoritma Greedy dalam pembuatan bot permainan Diamonds
+# Tugas Besar 1 IF2211 Strategi Algoritma <br/> Semester II tahun 2023/2024 <br/> 
+## Pemanfaatan Algoritma Greedy dalam pembuatan bot permainan Diamonds
 
 This repository contains code for a starter bot for diamond's game. The bot is made for Algorithm Strategies task.
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Authors 
 
@@ -59,7 +58,7 @@ To run the game engine, follow these steps:
     ```bash
     yarn
     ```
-5. Set up environment variables by running the following script: 
+5. Set up environment variables by running the following script <br/>
     For Windows:
     ```bash
     ./scripts/copy-env.bat
@@ -73,7 +72,7 @@ To run the game engine, follow these steps:
     ```bash
     docker compose up -d database
     ```
-7. Run the following script:
+7. Run the following script: <br/>
     For Windows:
     ```bash
     ./scripts/setup-db-prisma.bat

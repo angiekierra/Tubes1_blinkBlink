@@ -23,7 +23,7 @@ This repository contains code for a starter bot for diamond's game. The bot is m
   </tr>
   <tr>
     <td>Muhammad Neo Cicero Koda</td>
-    <td>13522110</td>
+    <td>13522108</td>
   </tr>
 </table>
 

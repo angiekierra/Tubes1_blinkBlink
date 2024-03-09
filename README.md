@@ -1,9 +1,11 @@
 <div align="center">
 
-# Tubes1_blinkBlink 💎
-This repository contains code for a starter bot for game. The bot is made for Algorithm Strategies task.
+# Tugas Besar 1 IF2211 Strategi Algoritma
+# Semester II tahun 2023/2024
+# Pemanfaatan Algoritma Greedy dalam pembuatan bot permainan Diamonds
+# This repository contains code for a starter bot for game. The bot is made for Algorithm Strategies task.
 
-## Authors
+## Authors Tubes1_blinkBlink 💎
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -46,7 +48,7 @@ The bot is coded with Python programming language and relies on Greedy Algorithm
     ```
 - Python
 
-## How to build
+## How to build and compile 
 To run the game engine, follow these steps:
 1. Download the game engine starter pack in the form of a .zip file from the following link: [Game Engine Starter Pack v1.1.0](https://github.com/haziqam/tubes1-IF2211-game-engine/releases/tag/v1.1.0).
 2. After installation, extract the .zip file and navigate to the root folder of the extracted files. Open a terminal in this directory.

@@ -1,10 +1,8 @@
 <div align="center">
 
-# Tugas Besar 1 IF2211 Strategi Algoritma <br/>
-# Semester II tahun 2023/2024 <br/>
-# Pemanfaatan Algoritma Greedy dalam pembuatan bot permainan Diamonds
+# Tugas Besar 1 IF2211 Strategi Algoritma <br/> Semester II tahun 2023/2024 <br/> Pemanfaatan Algoritma Greedy dalam pembuatan bot permainan Diamonds
 
-This repository contains code for a starter bot for game. The bot is made for Algorithm Strategies task.
+This repository contains code for a starter bot for diamond's game. The bot is made for Algorithm Strategies task.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

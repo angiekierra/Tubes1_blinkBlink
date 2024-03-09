@@ -19,11 +19,8 @@ BASE_URL = "http://localhost:3000/api"
 DEFAULT_BOARD_ID = 1
 CONTROLLERS = {
     "Random": RandomLogic,
-    "Angie1" : TestBot,
-    "Angie2" : NewBot,
-    "Azul" : myBot,
-    "Neo1" : BestDiamondLogic,
-    "Neo2" : BestClusterLogic
+    "TestBot" : TestBot,
+    "NewBot" : NewBot,
 }
 
 ###############################################################################

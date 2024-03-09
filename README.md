@@ -34,7 +34,7 @@ Diamonds is a programming challenge that pits the bot you create against bots fr
 The bot is coded with Python programming language and relies on Greedy Algorithm to select bot's action on each tick.
 
 ## Screenshot
-![image](https://drive.google.com/file/d/1YFF1LOsg3o2gyaqaq21iHUwUH70GmCqy/view?usp=sharing)
+![image](Screenshoot Game.png)
 
 ## Program Requirements
 
